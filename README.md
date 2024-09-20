@@ -1,7 +1,6 @@
 # Notes
 ## Docs
-You can read the documentation of the routes in Postman:
-([Postman Collection](https://www.postman.com/alg3bra/ec178037-915d-4d52-bc8c-11f69b2d814b/request/pp25avu/register))
+You can read the documentation of the routes in Postman here:([Notes Collection](https://www.postman.com/alg3bra/ec178037-915d-4d52-bc8c-11f69b2d814b/request/pp25avu/register))
 
 ## Running application (Docker)
 to run the main application run: 

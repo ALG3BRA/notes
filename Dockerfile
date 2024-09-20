@@ -7,5 +7,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY ./app .
 
-CMD if [ "$MIGRATE" = "true" ]; then alembic revision --autogenerate && alembic upgrade head; fi && \
-    uvicorn main:app --host 0.0.0.0 --port 8000
+ENV PYTHONPATH=/app

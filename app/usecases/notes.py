@@ -40,10 +40,15 @@ class NotesUseCase(AbstractNotesUseCase):
     def __init__(self, uow: UOWDep):
         self.uow = uow
 
-    async def get_notes(self, user_id: uuid.UUID) -> List[NotesSchema]:
+    async def get_notes(self, user_id: uuid.UUID) -> List[NotesSchema] | bool:
         async with self.uow as uow:
-            notes = await NotesService.get(uow, user_id)
-            return notes
+            try:
+                notes = await NotesService.get(uow, user_id)
+                if notes is not None:
+                    return notes
+                return False
+            except Exception as err:
+                print(err)
 
     async def add_note(self, user_id: uuid.UUID, text: str) -> uuid.UUID:
         async with self.uow as uow:

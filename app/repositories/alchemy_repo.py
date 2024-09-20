@@ -1,12 +1,13 @@
 import uuid
 from abc import ABC, abstractmethod
 from typing import List, TypeVar, Generic, Tuple, Optional
-from pydantic import BaseModel
 from sqlalchemy import insert, desc, delete, asc, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql import Select
 
-T = TypeVar('T', bound=BaseModel)
+from db.postgres import Base
+
+T = TypeVar('T', bound=Base)
 
 
 class AbstractDatabaseRepository(ABC, Generic[T]):
@@ -57,15 +58,17 @@ class SQLAlchemyRepository(AbstractDatabaseRepository[T]):
         return [row[0].to_read_model() for row in result.all()]
 
     async def find_one(self, **filter_by) -> Optional[T]:
-        stmt: Select = select(self.model).filter_by(**filter_by)
+        stmt = select(self.model).filter_by(**filter_by)
         result = await self.session.execute(stmt)
         result = result.scalar_one_or_none()
-        return result.to_read_model() if result else None
+        if result:
+            result = result.to_read_model()
+        return result
 
     async def add_one(self, **data) -> T:
         stmt = insert(self.model).values(**data).returning(self.model.id)
-        res = await self.session.execute(stmt)
-        return res.scalar_one()
+        result = await self.session.execute(stmt)
+        return result.scalar_one()
 
     async def update_by_id(self, id: uuid.UUID, **data) -> None:
         stmt = update(self.model).where(self.model.id == id).values(**data)

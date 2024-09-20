@@ -30,7 +30,7 @@ class NotesService:
     async def update_text(uow: AbstractUOW, user_id: uuid.UUID, note_id: uuid.UUID, new_text: str) -> Optional[bool]:
         note = await uow.notes.find_one(id=note_id, user_id=user_id)
         if note:
-            await uow.notes.update_by_id(note_id, text=new_text)
+            await uow.notes.update_by_id(id=note_id, text=new_text)
             return True
         return None
 

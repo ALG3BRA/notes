@@ -1,0 +1,11 @@
+[tool.black]
+line-length = 79
+exclude = '''
+    venv/
+    docker-compose.yml
+    docker-compose-test.yml
+    Dockerfile
+    .dockerignore
+    .gitignore
+    app/tests
+'''

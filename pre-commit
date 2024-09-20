@@ -1,0 +1,1 @@
+black --config ./.black .

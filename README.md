@@ -1,4 +1,8 @@
 # Notes
+## Docs
+You can read the documentation of the routes in Postman:
+([https://link-url-here.org](https://www.postman.com/alg3bra/ec178037-915d-4d52-bc8c-11f69b2d814b/request/pp25avu/register))
+
 ## Running application (Docker)
 to run the main application run: 
 ```

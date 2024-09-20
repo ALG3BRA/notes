@@ -24,4 +24,4 @@ services:
     depends_on:
       postgres:
         condition: service_started
-    command: ["pytest", "-v", "tests/notes.py"]
+    command: ["pytest", "-v", "tests/test_notes.py"]

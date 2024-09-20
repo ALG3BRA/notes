@@ -42,7 +42,8 @@ async def add_note(
                 }
             )
     except Exception as e:
-        raise HTTPException(status_code=404, detail="Something went wrong")
+        print(e)
+        raise HTTPException(status_code=500, detail="Something went wrong")
 
 
 @router.patch("/{note_id}")
@@ -52,9 +53,13 @@ async def update_text(
         notes_case: NotesCase,
         user=Depends(current_active_user)
 ) -> Response:
-    if await notes_case.update_note(user_id=user.id, note_id=note_id, text=text):
-        return Response(status_code=204)
-    raise HTTPException(status_code=500, detail="Note not found")
+    try:
+        if await notes_case.update_note(user_id=user.id, note_id=note_id, text=text):
+            return Response(status_code=204)
+    except Exception as e:
+        print(e)
+        raise HTTPException(status_code=500, detail="Something went wrong")
+    raise HTTPException(status_code=404, detail="Note not found")
 
 
 @router.delete("/{note_id}")
@@ -63,8 +68,12 @@ async def delete_note(
         notes_case: NotesCase,
         user=Depends(current_active_user)
 ) -> Response:
-    if await notes_case.delete_note(user_id=user.id, note_id=note_id):
-        return Response(status_code=204)
+    try:
+        if await notes_case.delete_note(user_id=user.id, note_id=note_id):
+            return Response(status_code=204)
+    except Exception as e:
+        print(e)
+        raise HTTPException(status_code=500, detail="Something went wrong")
     raise HTTPException(status_code=404, detail="Note not found")
 
 
@@ -74,13 +83,17 @@ async def switch_status(
         notes_case: NotesCase,
         user=Depends(current_active_user)
 ) -> JSONResponse:
-    new_status = await notes_case.switch_note_status(user_id=user.id, note_id=note_id)
-    if new_status is not None:
-        return JSONResponse(
-            status_code=200,
-            content={
-                "message": "Note status switched successfully",
-                "status": new_status
-            }
-        )
+    try:
+        new_status = await notes_case.switch_note_status(user_id=user.id, note_id=note_id)
+        if new_status is not None:
+            return JSONResponse(
+                status_code=200,
+                content={
+                    "message": "Note status switched successfully",
+                    "status": new_status
+                }
+            )
+    except Exception as e:
+        print(e)
+        raise HTTPException(status_code=500, detail="Something went wrong")
     raise HTTPException(status_code=404, detail="Note not found")
